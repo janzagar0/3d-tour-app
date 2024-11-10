@@ -167,6 +167,17 @@ body {
     vertical-align: middle;
 }
 
+#headerImage-mobile {
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	float: left;
+	display: none;
+	height: 60px;
+	width: 60px;
+}
+	
 #links {
     position: absolute;
     right: 6px;
@@ -945,6 +956,10 @@ hr {
     #headerText-mobile {
         display: block;
     }
+
+#headerImage-mobile {
+	display: block;
+}
 
     #linkText {
         display: none;

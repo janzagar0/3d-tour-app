@@ -401,8 +401,9 @@ h6 {
 #splash-content {
     position: absolute;
     width: 100%;
-    height: calc(100% - 110px);
-    overflow: auto;
+    height: calc(100% - 100px);
+	overflow-x: hidden;
+    overflow-y: auto;
     top: 50px;
     left: 0;
     padding-top: 0;
@@ -586,6 +587,16 @@ h6 {
     padding-left: 1rem;
     padding-right: 1rem;
 }
+
+#mobile-disclaimer {
+	display: none;
+	color: white;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 16px;
+	padding-left: 1rem;
+	padding-right: 1rem;
 
 #moreInfo-link {
     color: #e21833;
@@ -1003,4 +1014,7 @@ hr {
         height: fit-content;
         top: 130px;
     }
+
+	#mobile-disclaimer {
+		display: block;
 }

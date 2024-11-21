@@ -265,7 +265,8 @@ body {
     position: absolute;
     top: 350px;
     margin: 0;
-    overflow: auto;
+	overflow-x: hidden;
+    overflow-y: auto;
     padding: 0;
     text-align: center;
     z-index: 600;

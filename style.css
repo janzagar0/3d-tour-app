@@ -471,13 +471,14 @@ h6 {
 
 #splash {
   /* Hidden by default */
-  position: fixed; /* Stay in place */
+  position: absolute; /* Stay in place */
   z-index: 901; /* Sit on top */
   left: 27.5%;
   top: 12.5%;
   width: 45%;
   max-width: 625px;
   height: 75%;
+  transform: translate(-50%, 0);
   overflow: auto; /* Enable scroll if needed */
   /*color: white;*/
   background: white;

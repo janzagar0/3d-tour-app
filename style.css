@@ -473,14 +473,13 @@ h6 {
   /* Hidden by default */
   position: absolute; /* Stay in place */
   z-index: 901; /* Sit on top */
-  left: 27.5%;
+  left: 50%;
   top: 12.5%;
   width: 45%;
   max-width: 625px;
   height: 75%;
   transform: translate(-50%, 0);
-  overflow: auto; /* Enable scroll if needed */
-  /*color: white;*/
+  overflow: auto;
   background: white;
   border: 1px solid #333;
   border-radius: 5px 5px 5px 5px;

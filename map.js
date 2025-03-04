@@ -1,6 +1,5 @@
 // API Code (ArcGIS Maps SDK for JavaScript)
 require([
-  "esri/config",
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/widgets/Popup",
@@ -8,10 +7,7 @@ require([
   "esri/widgets/Home",
   "esri/geometry/Extent",
   "esri/widgets/Legend",
-], (esriConfig, WebScene, SceneView, Popup, Query, Home, Extent, Legend) => {
-  esriConfig.apiKey =
-    "AAPTxy8BH1VEsoebNVZXo8HurILFlMFamhQmN42lHPqQWag0qHraCacy043KAd7As8TObxtgwjz2jmzemWcHwX3v7EpKq7LN6Ht8A5XH9dLKdeccImVLyDumlHP-DY5A-qV9UHMNkaQJKm1-Y-dgQnEm36s1gFcItn4n00lE6BCZDt4-ZP_zkK85v7A-HNUobo5-zMjLJN9zNUzIkZNPoHYla7siMjYvumZ9HsrJKxcXNMZIAIntrkWMq_3Mv_wr2mmVyq9Eu7FF1uuws81VrdTnLQ..AT1_lw2IFDzG";
-
+], (WebScene, SceneView, Popup, Query, Home, Extent, Legend) => {
   // Create webscene
   webscene = new WebScene({
     portalItem: {

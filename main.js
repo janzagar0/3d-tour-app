@@ -56,7 +56,6 @@ if (document.cookie) {
 
 function setCookie() {
   const isChecked = document.querySelector("#dontshow-check").checked;
-  console.log(isChecked);
 
   if (isChecked)
     document.cookie = `hideSplash = yes; path=/; max-age=${60 * 60 * 24 * 7}`;

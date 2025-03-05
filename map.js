@@ -354,6 +354,7 @@ require([
             );
             */
             homeView();
+            view.closePopup();
 
             queryResponse = response.features;
 

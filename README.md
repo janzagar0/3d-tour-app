@@ -7,6 +7,6 @@ State University Map and Geospatial Hub's 3D Explorer web application, and we wo
 The 3D model of the map collection was created in ArcGIS Pro using geometry creation and editing techniques and extensive field measurements obtained using a handheld laser measurement tool (similar to [this](https://shop.leica-geosystems.com/global/measurement-tools/disto/leica-disto-overview)). This model is hosted as a web scene with its component scene layers and feature layers in an ArcGIS Online cloud environment. The actual web application was built using vanilla HTML, CSS, and JavaScript using the ArcGIS Maps SDK for JavaScript mapping library. Stay tuned for more detailed information on this project's workflow. 
 
 ## **Credits**
-Jose Anza Garcia - GIS Specialist, project lead, built model and developed web application
-Milan Budhathoki - GIS Librarian, project supervisor, main stakeholder
-Jim Nealis - Map Collection Volunteer, provided crucial support and advice related to the map collection
+Jose Anza Garcia - GIS Specialist, project lead, built model and developed web application  
+Milan Budhathoki - GIS Librarian, project supervisor, main stakeholder  
+Jim Nealis - Map Collection Volunteer, provided crucial support and advice related to the map collection  

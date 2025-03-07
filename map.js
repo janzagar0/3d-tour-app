@@ -342,17 +342,6 @@ require([
             showElement(errorScreen);
             errorContent.innerHTML = "No results found. Please try again.";
           } else {
-            // Reset view to home (in future, do this only if returned array length is > 1)
-            /*
-            view.goTo(
-              {
-                target: homeWidget.viewpoint,
-              },
-              {
-                speedFactor: 0.5,
-              }
-            );
-            */
             homeView();
             view.closePopup();
 

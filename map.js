@@ -147,7 +147,7 @@ require([
 
   webscene.loadAll().then(() => {
     sceneLayer = webscene.layers.getItemAt(1);
-    sceneLayer.outFields = ["*"];
+    // sceneLayer.outFields = ["*"]; This breaks the popups for some reason
 
     const query = new Query();
     query.where = "Category LIKE '%'";

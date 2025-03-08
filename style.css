@@ -195,7 +195,10 @@ tr {
 
 #ht2 {
   position: absolute;
+  margin-top: 0;
+  margin-bottom: 0;
   top: 30px;
+  font-size: 16px;
   /*color: #ffd200;*/
 }
 
@@ -510,7 +513,7 @@ h6 {
   line-height: 2;
 }
 
-#popup-tutorial {
+.popup-tutorial {
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;
@@ -686,7 +689,7 @@ h6 {
   width: 100%;
 }
 
-#moreInfo-sectionheader {
+.moreInfo-sectionheader {
   margin-left: auto;
   margin-right: auto;
   margin-top: 1rem;
@@ -726,7 +729,7 @@ h6 {
   margin-bottom: 0;
 }
 
-#infoModal-text {
+.infoModal-text {
   /*color: white;*/
   text-align: left;
   margin-left: auto;
@@ -753,7 +756,7 @@ h6 {
   font-weight: bold;
 }
 
-#moreInfo-link2 {
+.moreInfo-link2 {
   text-decoration: none;
 }
 

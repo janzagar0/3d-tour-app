@@ -33,7 +33,12 @@
   <body onload="spinner()">
     <div id="loader-page">
       <header id="loader-header">
-        <img id="loader-img" width="33%" src="images/lib-svg-white.svg" />
+        <img
+          id="loader-img"
+          width="33%"
+          src="images/lib-svg-white.svg"
+          alt="UMD Libraries logo"
+        />
         <p id="loader-text">The 3D Tour web application will load soon...</p>
       </header>
       <div id="loader"></div>
@@ -70,7 +75,7 @@
         >McKeldin Library Map Collection 3D Tour</text
       >
     -->
-      <text class="headerText" id="ht2">GIS and Data Service Center</text>
+      <h2 class="headerText" id="ht2">GIS and Data Service Center</h2>
       <text id="headerText-mobile">3D Tour Web App</text>
       <img id="headerImage-mobile" src="images/umd-logo.svg" alt="UMD Logo" />
       <div id="links">
@@ -105,18 +110,18 @@
         <text id="splash-title">Welcome</text>
       </div>
       <div id="splash-content">
-        <p id="infoModal-text">
+        <p class="infoModal-text">
           This application provides a way to explore the McKeldin Library map
           collection online. The collection contains over 200,000 items,
           including maps, relief models, and atlases. There are multiple ways to
           begin your exploration and discovery process.
         </p>
         <img
-          id="popup-tutorial"
+          class="popup-tutorial"
           src="images/overview.png"
           alt="Overview of application"
         />
-        <p id="infoModal-text">
+        <p class="infoModal-text">
           Below is an overview of the basic map controls. The zoom buttons allow
           you to zoom in or out. Movement is primarily controlled through the
           pan and rotate buttons, which can be toggled on or off as needed. Pan
@@ -126,11 +131,11 @@
           return to the default starting viewing angle and zoom as desired.
         </p>
         <img
-          id="popup-tutorial"
+          class="popup-tutorial"
           src="images/map-controls.png"
           alt="Map controls"
         />
-        <p id="infoModal-text">
+        <p class="infoModal-text">
           You can use the controls to move around the scene and click on
           individual features to get an idea of the categories and ranges of the
           maps contained within. However, the quickest and easiest way to find
@@ -138,11 +143,11 @@
           accessed by clicking on the search button, shown below.
         </p>
         <img
-          id="popup-tutorial"
+          class="popup-tutorial"
           src="images/select-tool.png"
           alt="Select tool"
         />
-        <p id="infoModal-text">
+        <p class="infoModal-text">
           The search menu will open. Choose a search option and then select it
           with its respective button at left. Search options are map category
           (e.g., topographic, nautical) and relevant subcategory if applicable,
@@ -153,11 +158,11 @@
           highlights in the 3D map and return to the default (home) view.
         </p>
         <img
-          id="popup-tutorial"
+          class="popup-tutorial"
           src="images/select-tool-modal.png"
           alt="Select tool explained"
         />
-        <p id="infoModal-text">
+        <p class="infoModal-text">
           Upon clicking the search button, cabinets with relevant results to
           your query will be highlighted in yellow. In the sidebar, result cards
           for each drawer will appear. You can click on each of these to zoom to
@@ -169,16 +174,20 @@
           NOTE: on mobile devices, result card functionality is not available.
         </p>
         <img
-          id="popup-tutorial"
+          class="popup-tutorial"
           src="images/select-results.png"
           alt="Query Results"
         />
-        <p id="infoModal-text">
+        <p class="infoModal-text">
           Popups can also be opened manually. Refer to the image below for a
           guide to the information contained in the popup.
         </p>
-        <img id="popup-tutorial" src="images/popuphelp.png" alt="Popup Help" />
-        <p id="infoModal-text">
+        <img
+          class="popup-tutorial"
+          src="images/popuphelp.png"
+          alt="Popup Help"
+        />
+        <p class="infoModal-text">
           We hope that this application is useful to you, and please enjoy
           exploring the collection. More information about us and a link to our
           suggestion box can be found in the "More Info" popup.
@@ -206,7 +215,7 @@
     <div id="sidebar">
       <!--<div id="libraryMap">-->
       <div id="layerInfos">
-        <img src="images/floor4.png" id="floor4Img" />
+        <img src="images/floor4.png" id="floor4Img" alt="Map of 4th floor" />
       </div>
       <div id="resultTable">
         <text id="tableText"
@@ -256,8 +265,8 @@
       <div id="moreInfo-header"></div>
       <text id="moreInfo-title">More Information</text>
       <div id="moreInfo-content">
-        <text id="moreInfo-sectionheader">About This Project</text>
-        <p id="infoModal-text">
+        <text class="moreInfo-sectionheader">About This Project</text>
+        <p class="infoModal-text">
           This project serves to provide the public with a tool to explore the
           University of Maryland's vast, largely uncatalogued map collection
           (200,000+ maps) in an interactive way. It served as a capstone for my
@@ -271,11 +280,11 @@
           professors (Dr. Ma, Dr. Tao, and Dr. Resop) for their kind and
           unwavering support through my year in the program.
         </p>
-        <text id="moreInfo-sectionheader">About Us</text>
-        <p id="infoModal-text">
+        <text class="moreInfo-sectionheader">About Us</text>
+        <p class="infoModal-text">
           <a
             href="https://www.lib.umd.edu/research/services/gis"
-            id="moreInfo-link2"
+            class="moreInfo-link2"
             target="_blank"
             ><text id="moreInfo-link">The GIS & Data Service Center</text></a
           >
@@ -286,7 +295,7 @@
           to the entire UMD Community, free of charge. For more information,
           visit our website by clicking on the link below:
         </p>
-        <a href="https://arcg.is/1CbzyS2" id="moreInfo-link2" target="_blank"
+        <a href="https://arcg.is/1CbzyS2" class="moreInfo-link2" target="_blank"
           ><text id="feedbackLink">Feedback Survey Form</text></a
         >
         <br />

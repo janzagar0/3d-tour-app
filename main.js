@@ -1,5 +1,4 @@
 // Global variables
-
 let webscene;
 let view;
 let sceneLayer;
@@ -15,6 +14,7 @@ let queryResponse;
 let targetGeom;
 let defaultExtent;
 let homeWidget;
+let cards;
 
 // Function to hide displays
 function showElement(element) {
@@ -80,6 +80,15 @@ function showSelect() {
     hideElement(selectModal);
   }
 }
+
+const form = document.querySelector("#search-form");
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Enter" && selectModal.style.display === "block") {
+    executeQuery();
+    e.preventDefault();
+  }
+});
 
 // Create empty legend div, to be populated later in API function
 const legendModal = document.querySelector("#legendModal");

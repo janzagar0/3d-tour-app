@@ -17,7 +17,6 @@ require([
       surfaceColor: [255, 255, 255],
     },
     clippingEnabled: true,
-    // clippingArea:
   });
 
   // Create view
@@ -270,511 +269,271 @@ require([
         option.textContent = item;
         cabSelector.appendChild(option);
       });
-
-      /**************************************************************************
-        Get input from select tool, pass it to a query(); also handles result 
-        cards, card highlights, and card zoom functionality. 
-
-        **************************************************************************/
-
-      window.executeQuery = function () {
-        // Get all inputs as constants
-        const categoryInput = document.getElementById("category").value;
-        const subcategoryInput = document.getElementById("subcategory").value;
-        const locationInput = document.getElementById("locationInput").value;
-        const cabinetInput = document.getElementById("cabinet").value;
-
-        let searchType = document.querySelector(
-          'input[name="searchType"]:checked'
-        );
-
-        // Verify that a select option is chosen
-        if (searchType == null) {
-          showElement(shadow);
-          showElement(errorScreen);
-          errorContent.innerHTML = "Please specify a search type first.";
-          return;
-        } else {
-          searchType = searchType.value;
-        }
-
-        // Get the selections and build an SQL query
-        let selectedQuery = "";
-        if (searchType === "category" && subcategoryInput === "") {
-          selectedQuery = "Category = '" + categoryInput + "'";
-        }
-        if (searchType === "category" && subcategoryInput != "") {
-          selectedQuery =
-            "Category = '" +
-            categoryInput +
-            "' AND Subcategory = '" +
-            subcategoryInput +
-            "'";
-        } else if (searchType === "cabinet") {
-          selectedQuery = "Cabinet = " + cabinetInput;
-        } else if (searchType === "location") {
-          selectedQuery = "Description LIKE " + "'%" + locationInput + "%'";
-        }
-
-        // Specify parameters for query
-        const userQuery = new Query();
-        userQuery.where = selectedQuery;
-        userQuery.outFields = [
-          "OBJECTID",
-          "Subcategory",
-          "Range",
-          "Cabinet",
-          "Drawer",
-          "ID",
-          "Link",
-          "Category",
-          "Description",
-        ];
-        userQuery.orderByFields = ["ID"];
-        userQuery.returnGeometry = true;
-        userQuery.returnZ = true;
-
-        // Query features
-        sceneLayer.queryFeatures(userQuery).then(function (response) {
-          // Exception handling for bad location queries for now...
-          if (response.features.length === 0) {
-            showElement(shadow);
-            showElement(errorScreen);
-            errorContent.innerHTML = "No results found. Please try again.";
-          } else {
-            homeView();
-            view.closePopup();
-
-            queryResponse = response.features;
-
-            objectIdResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              objectIdResponse.push(response.features[i].attributes.OBJECTID);
-            }
-
-            var cabinetResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              cabinetResponse.push(response.features[i].attributes.Cabinet);
-            }
-
-            var drawerResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              drawerResponse.push(response.features[i].attributes.Drawer);
-            }
-
-            var categoryResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              categoryResponse.push(response.features[i].attributes.Category);
-            }
-
-            var contentResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              contentResponse.push(response.features[i].attributes.Description);
-            }
-
-            var rangeResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              rangeResponse.push(response.features[i].attributes.Range);
-            }
-
-            var linkResponse = [];
-            for (var i = 0; i < response.features.length; i++) {
-              linkResponse.push(response.features[i].attributes.Link);
-            }
-
-            if (hideText) {
-              hideElement(hideText);
-            }
-
-            // Get sidebar result table using ID and keep it empty for now
-            var resultTable = document.getElementById("resultTable");
-            resultTable.innerHTML = "";
-
-            // Populate the unique result table cards
-            for (var i = 0; i < cabinetResponse.length; i++) {
-              var card = document.createElement("response-card");
-              card.className = "card";
-              card.innerHTML =
-                "<h6>Cabinet " +
-                cabinetResponse[i] +
-                " - Drawer " +
-                drawerResponse[i] +
-                "</h6><hr><b>Category:</b> " +
-                categoryResponse[i] +
-                "<br><b>Location(s):</b> " +
-                contentResponse[i] +
-                "<br><b>Label range:</b> " +
-                rangeResponse[i];
-              card.setAttribute("name", `${objectIdResponse[i]}`);
-              resultTable.appendChild(card);
-            }
-
-            var cards = document.getElementsByClassName("card");
-
-            // Create changes on view whenever a card is selected
-            view.whenLayerView(sceneLayer).then((layerView) => {
-              if (highlightSelect) {
-                highlightSelect.remove();
-              }
-
-              // Remove any existing card click highlight and set highlight options
-              clickHighlight?.remove();
-              view.highlightOptions = {
-                color: [255, 210, 0],
-                fillOpacity: 0.4,
-              };
-
-              highlightSelect = layerView.highlight(objectIdResponse);
-
-              // Card click function
-              function cardClick(e) {
-                // Remove any existing card click highlight
-                highlightSelect?.remove();
-                clickHighlight?.remove();
-                // view.popup.close();
-                view.closePopup();
-                // Reset highlight colors
-                view.highlightOptions = {
-                  color: "#e21833",
-                  fillOpacity: 0.25,
-                };
-                // Get Object ID of drawer associated with clicked card from the name attribute set to the card
-                idTarget = "";
-
-                // Make sure target is always response card, not child divs
-                var cardElement;
-
-                if (e.target.tagName != "RESPONSE-CARD") {
-                  cardElement = e.target.parentElement;
-                } else {
-                  cardElement = e.target;
-                }
-
-                getId = cardElement.getAttribute("name");
-                idTarget = parseInt(cardElement.getAttribute("name"));
-
-                // Remove any existing card click highlight
-                clickHighlight = layerView.highlight(idTarget);
-
-                var cardClickQuery = new Query();
-                cardClickQuery.where = `OBJECTID = ${idTarget}`;
-                // console.log(cardClickQuery.where);
-                cardClickQuery.outFields = ["OBJECTID", "Cabinet", "Drawer"];
-                cardClickQuery.returnGeometry = true;
-                cardClickQuery.returnZ = true;
-
-                // When a card is clicked, zoom to the associated drawer
-                sceneLayer
-                  .queryFeatures(cardClickQuery)
-                  .then(function (response) {
-                    var clickQueryCabinet =
-                      response.features[0].attributes.Cabinet;
-                    var clickQueryDrawer =
-                      response.features[0].attributes.Drawer;
-
-                    view.openPopup({
-                      features: response.features,
-                      location: response.features.geometry,
-                    });
-
-                    // Separate cabinets into their respective directions (atlas case is separate)
-                    const dir180 = [
-                      5, 6, 7, 8, 15, 16, 17, 18, 19, 26, 27, 28, 29, 30, 37,
-                      38, 39, 40, 41,
-                    ];
-                    const dir360 = [
-                      1, 2, 3, 4, 9, 10, 11, 12, 13, 14, 20, 21, 23, 24, 25, 32,
-                      33, 34, 35, 36,
-                    ];
-                    const dir90 = [41, 42, 43, 44, 45, 46, 47];
-                    const cab48Dir360 = [
-                      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                      18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-                      32,
-                    ];
-                    const cab48Dir180 = [
-                      33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
-                      47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-                      61, 62, 63, 64,
-                    ];
-                    const cab50dir360 = [
-                      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                    ];
-                    const cab50dir180 = [
-                      17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-                      31, 32,
-                    ];
-
-                    // If the selected card's drawer is facing the 180 direction, zoom to it
-                    if (dir180.indexOf(clickQueryCabinet) != -1) {
-                      view.goTo(
-                        {
-                          target: response.features[0].geometry,
-                          heading: 180,
-                          tilt: 120,
-                          zoom: 20,
-                        },
-                        {
-                          speedFactor: 0.5,
-                        }
-                      );
-                      // If the selected card's drawer is facing the 360 direction, zoom to it
-                    } else if (dir360.indexOf(clickQueryCabinet) != -1) {
-                      view.goTo(
-                        {
-                          target: response.features[0].geometry,
-                          heading: 360,
-                          tilt: 120,
-                          zoom: 20,
-                        },
-                        {
-                          speedFactor: 0.5,
-                        }
-                      );
-                    } else if (dir90.indexOf(clickQueryCabinet) != -1) {
-                      view.goTo(
-                        {
-                          target: response.features[0].geometry,
-                          heading: 90,
-                          tilt: 120,
-                          zoom: 20,
-                        },
-                        {
-                          speedFactor: 0.5,
-                        }
-                      );
-                    } else if (clickQueryCabinet === 22) {
-                      view.goTo(
-                        {
-                          target: response.features[0].geometry,
-                          heading: 315,
-                          tilt: 120,
-                          zoom: 20,
-                        },
-                        {
-                          speedFactor: 0.5,
-                        }
-                      );
-                    } else if (clickQueryCabinet === 48) {
-                      if (cab48Dir180.indexOf(clickQueryDrawer) != -1) {
-                        view.goTo(
-                          {
-                            target: response.features[0].geometry,
-                            heading: 180,
-                            tilt: 120,
-                            zoom: 20,
-                          },
-                          {
-                            speedFactor: 0.5,
-                          }
-                        );
-                      } else if (cab48Dir360.indexOf(clickQueryDrawer) != -1) {
-                        view.goTo(
-                          {
-                            target: response.features[0].geometry,
-                            heading: 360,
-                            tilt: 120,
-                            zoom: 20,
-                          },
-                          {
-                            speedFactor: 0.5,
-                          }
-                        );
-                      }
-                    } else if (clickQueryCabinet === 49) {
-                      view.goTo(
-                        {
-                          target: response.features[0].geometry,
-                          heading: 270,
-                          tilt: 120,
-                          zoom: 20,
-                        },
-                        {
-                          speedFactor: 0.5,
-                        }
-                      );
-                    } else if (clickQueryCabinet === 50) {
-                      if (cab50dir180.indexOf(clickQueryDrawer) != -1) {
-                        view.goTo(
-                          {
-                            target: response.features[0].geometry,
-                            heading: 180,
-                            tilt: 120,
-                            zoom: 20,
-                          },
-                          {
-                            speedFactor: 0.5,
-                          }
-                        );
-                      } else if (cab50dir360.indexOf(clickQueryDrawer) != -1) {
-                        view.goTo(
-                          {
-                            target: response.features[0].geometry,
-                            heading: 360,
-                            tilt: 120,
-                            zoom: 20,
-                          },
-                          {
-                            speedFactor: 0.5,
-                          }
-                        );
-                      }
-                    }
-                  });
-              }
-
-              // Set an event listener for every card for click
-              for (var i = 0; i < cards.length; i++) {
-                cards[i].addEventListener("click", cardClick);
-              }
-
-              // For selections made with the query tool, only zoom to drawer if the result is
-              // one drawer
-              if (objectIdResponse.length === 1) {
-                const dir180 = [
-                  5, 6, 7, 8, 15, 16, 17, 18, 19, 26, 27, 28, 29, 30, 37, 38,
-                  39, 40, 41,
-                ];
-                const dir360 = [
-                  1, 2, 3, 4, 9, 10, 11, 12, 13, 14, 20, 21, 22, 23, 24, 25, 32,
-                  33, 34, 35, 36,
-                ];
-                const dir90 = [41, 42, 43, 44, 45, 46, 47];
-                const cab48Dir360 = [
-                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-                  19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
-                ];
-                const cab48Dir180 = [
-                  33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
-                  48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
-                  63, 64,
-                ];
-                const cab50dir360 = [
-                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                ];
-                const cab50dir180 = [
-                  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-                  32,
-                ];
-
-                if (dir180.indexOf(cabinetResponse[0]) != -1) {
-                  view.goTo(
-                    {
-                      target: response.features[0].geometry,
-                      heading: 180,
-                      tilt: 55,
-                      zoom: 22,
-                    },
-                    {
-                      speedFactor: 0.5,
-                    }
-                  );
-                } else if (dir360.indexOf(cabinetResponse[0]) != -1) {
-                  view.goTo(
-                    {
-                      target: response.features[0].geometry,
-                      heading: 360,
-                      tilt: 55,
-                      zoom: 22,
-                    },
-                    {
-                      speedFactor: 0.5,
-                    }
-                  );
-                } else if (dir90.indexOf(cabinetResponse[0]) != -1) {
-                  view.goTo(
-                    {
-                      target: response.features[0].geometry,
-                      heading: 90,
-                      tilt: 55,
-                      zoom: 22,
-                    },
-                    {
-                      speedFactor: 0.5,
-                    }
-                  );
-                } else if (clickQueryCabinet === 22) {
-                  view.goTo(
-                    {
-                      target: response.features[0].geometry,
-                      heading: 315,
-                      tilt: 120,
-                      zoom: 20,
-                    },
-                    {
-                      speedFactor: 0.5,
-                    }
-                  );
-                } else if (clickQueryCabinet === 48) {
-                  if (cab48Dir180.indexOf(clickQueryDrawer) != -1) {
-                    view.goTo(
-                      {
-                        target: response.features[0].geometry,
-                        heading: 180,
-                        tilt: 120,
-                        zoom: 20,
-                      },
-                      {
-                        speedFactor: 0.5,
-                      }
-                    );
-                  } else if (cab48Dir360.indexOf(clickQueryDrawer) != -1) {
-                    view.goTo(
-                      {
-                        target: response.features[0].geometry,
-                        heading: 360,
-                        tilt: 120,
-                        zoom: 20,
-                      },
-                      {
-                        speedFactor: 0.5,
-                      }
-                    );
-                  }
-                } else if (clickQueryCabinet === 49) {
-                  view.goTo(
-                    {
-                      target: response.features[0].geometry,
-                      heading: 270,
-                      tilt: 120,
-                      zoom: 20,
-                    },
-                    {
-                      speedFactor: 0.5,
-                    }
-                  );
-                } else if (clickQueryCabinet === 50) {
-                  if (cab50dir180.indexOf(clickQueryDrawer) != -1) {
-                    view.goTo(
-                      {
-                        target: response.features[0].geometry,
-                        heading: 180,
-                        tilt: 120,
-                        zoom: 20,
-                      },
-                      {
-                        speedFactor: 0.5,
-                      }
-                    );
-                  } else if (cab50dir360.indexOf(clickQueryDrawer) != -1) {
-                    view.goTo(
-                      {
-                        target: response.features[0].geometry,
-                        heading: 360,
-                        tilt: 120,
-                        zoom: 20,
-                      },
-                      {
-                        speedFactor: 0.5,
-                      }
-                    );
-                  }
-                }
-              }
-            });
-          }
-        });
-      };
     });
   });
+
+  /**************************************************************************
+      Get input from select tool, pass it to a query(); also handles result 
+      cards, card highlights, and card zoom functionality. 
+
+    **************************************************************************/
+
+  const cabinetZoom = function (response, cabinet, drawer) {
+    const dir180 = [
+      5, 6, 7, 8, 15, 16, 17, 18, 19, 26, 27, 28, 29, 30, 37, 38, 39, 40, 41,
+    ];
+    const dir360 = [
+      1, 2, 3, 4, 9, 10, 11, 12, 13, 14, 20, 21, 22, 23, 24, 25, 32, 33, 34, 35,
+      36,
+    ];
+    const dir90 = [41, 42, 43, 44, 45, 46, 47];
+
+    const cab48Dir180 = [
+      33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+      51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
+    ];
+    const cab50dir180 = [
+      17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
+    ];
+
+    const zoomToFeature = function (heading) {
+      view.goTo(
+        {
+          target: response.features[0].geometry,
+          heading: heading,
+          tilt: 120,
+          zoom: 20,
+        },
+        {
+          speedFactor: 0.5,
+        }
+      );
+    };
+
+    if (dir180.indexOf(cabinet) != -1) zoomToFeature(180);
+    else if (dir360.indexOf(cabinet) != -1) zoomToFeature(360);
+    else if (dir90.indexOf(cabinet) != -1) zoomToFeature(90);
+    else if (cabinet === 22) zoomToFeature(315);
+    else if (cabinet === 48)
+      if (cab48Dir180.indexOf(drawer) != -1) zoomToFeature(180);
+      else zoomToFeature(360);
+    else if (cabinet === 49) zoomToFeature(270);
+    else if (cabinet === 50)
+      if (cab50dir180.indexOf(drawer) != -1) zoomToFeature(180);
+      else zoomToFeature(360);
+  };
+
+  window.executeQuery = function () {
+    // Get all inputs as constants
+    const categoryInput = document.getElementById("category").value;
+    const subcategoryInput = document.getElementById("subcategory").value;
+    const locationInput = document.getElementById("locationInput").value;
+    const cabinetInput = document.getElementById("cabinet").value;
+
+    let searchType = document.querySelector('input[name="searchType"]:checked');
+
+    // Verify that a select option is chosen
+    if (searchType == null) {
+      showElement(shadow);
+      showElement(errorScreen);
+      errorContent.innerHTML = "Please specify a search type first.";
+      return;
+    } else {
+      searchType = searchType.value;
+    }
+
+    // Get the selections and build an SQL query
+    let selectedQuery = "";
+    if (searchType === "category" && subcategoryInput === "") {
+      selectedQuery = "Category = '" + categoryInput + "'";
+    }
+    if (searchType === "category" && subcategoryInput != "") {
+      selectedQuery =
+        "Category = '" +
+        categoryInput +
+        "' AND Subcategory = '" +
+        subcategoryInput +
+        "'";
+    } else if (searchType === "cabinet") {
+      selectedQuery = "Cabinet = " + cabinetInput;
+    } else if (searchType === "location") {
+      selectedQuery = "Description LIKE " + "'%" + locationInput + "%'";
+    }
+
+    // Specify parameters for query
+    const userQuery = new Query();
+    userQuery.where = selectedQuery;
+    userQuery.outFields = [
+      "OBJECTID",
+      "Subcategory",
+      "Range",
+      "Cabinet",
+      "Drawer",
+      "ID",
+      "Link",
+      "Category",
+      "Description",
+    ];
+    userQuery.orderByFields = ["ID"];
+    userQuery.returnGeometry = true;
+    userQuery.returnZ = true;
+
+    // Query features
+    sceneLayer.queryFeatures(userQuery).then(function (response) {
+      // Exception handling for bad location queries for now...
+      if (response.features.length === 0) {
+        showElement(shadow);
+        showElement(errorScreen);
+        errorContent.innerHTML = "No results found. Please try again.";
+      } else {
+        homeView();
+        view.closePopup();
+
+        queryResponse = response.features;
+
+        objectIdResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          objectIdResponse.push(response.features[i].attributes.OBJECTID);
+        }
+
+        var cabinetResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          cabinetResponse.push(response.features[i].attributes.Cabinet);
+        }
+
+        var drawerResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          drawerResponse.push(response.features[i].attributes.Drawer);
+        }
+
+        var categoryResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          categoryResponse.push(response.features[i].attributes.Category);
+        }
+
+        var contentResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          contentResponse.push(response.features[i].attributes.Description);
+        }
+
+        var rangeResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          rangeResponse.push(response.features[i].attributes.Range);
+        }
+
+        var linkResponse = [];
+        for (var i = 0; i < response.features.length; i++) {
+          linkResponse.push(response.features[i].attributes.Link);
+        }
+
+        if (hideText) {
+          hideElement(hideText);
+        }
+
+        // Get sidebar result table using ID and keep it empty for now
+        var resultTable = document.getElementById("resultTable");
+        resultTable.innerHTML = "";
+
+        // Populate the unique result table cards
+        for (var i = 0; i < cabinetResponse.length; i++) {
+          var card = document.createElement("response-card");
+          card.className = "card";
+          card.innerHTML =
+            "<h6>Cabinet " +
+            cabinetResponse[i] +
+            " - Drawer " +
+            drawerResponse[i] +
+            "</h6><hr><b>Category:</b> " +
+            categoryResponse[i] +
+            "<br><b>Location(s):</b> " +
+            contentResponse[i] +
+            "<br><b>Label range:</b> " +
+            rangeResponse[i];
+          card.setAttribute("name", `${objectIdResponse[i]}`);
+          resultTable.appendChild(card);
+        }
+
+        cards = document.getElementsByClassName("card");
+
+        if (objectIdResponse.length === 1) {
+          cabinetZoom(response, cabinetResponse[0], drawerResponse[0]);
+          view.openPopup({
+            features: response.features,
+            location: response.features.geometry,
+          });
+        }
+
+        // Create changes on view whenever a card is selected
+        view.whenLayerView(sceneLayer).then((layerView) => {
+          if (highlightSelect) {
+            highlightSelect.remove();
+          }
+
+          // Remove any existing card click highlight and set highlight options
+          clickHighlight?.remove();
+          view.highlightOptions = {
+            color: [255, 210, 0],
+            fillOpacity: 0.4,
+          };
+
+          highlightSelect = layerView.highlight(objectIdResponse);
+        });
+
+        function cardClick(e) {
+          // Remove any existing card click highlight
+          highlightSelect?.remove();
+          clickHighlight?.remove();
+          // view.popup.close();
+          view.closePopup();
+          // Reset highlight colors
+          view.highlightOptions = {
+            color: "#e21833",
+            fillOpacity: 0.25,
+          };
+          // Get Object ID of drawer associated with clicked card from the name attribute set to the card
+          idTarget = "";
+
+          // Make sure target is always response card, not child divs
+          let cardElement;
+
+          if (e.target.tagName != "RESPONSE-CARD") {
+            cardElement = e.target.parentElement;
+          } else {
+            cardElement = e.target;
+          }
+
+          getId = cardElement.getAttribute("name");
+          idTarget = parseInt(cardElement.getAttribute("name"));
+
+          // Remove any existing card click highlight
+          // clickHighlight = layerView.highlight(idTarget);
+          clickHighlight = view.highlight(idTarget);
+
+          let cardClickQuery = new Query();
+          cardClickQuery.where = `OBJECTID = ${idTarget}`;
+          // console.log(cardClickQuery.where);
+          cardClickQuery.outFields = ["OBJECTID", "Cabinet", "Drawer"];
+          cardClickQuery.returnGeometry = true;
+          cardClickQuery.returnZ = true;
+
+          // When a card is clicked, zoom to the associated drawer
+          sceneLayer.queryFeatures(cardClickQuery).then(function (resp) {
+            const clickQueryCabinet = resp.features[0].attributes.Cabinet;
+            const clickQueryDrawer = resp.features[0].attributes.Drawer;
+
+            view.openPopup({
+              features: resp.features,
+              location: resp.features.geometry,
+            });
+
+            cabinetZoom(resp, clickQueryCabinet, clickQueryDrawer);
+          });
+        }
+
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].addEventListener("click", cardClick);
+        }
+      }
+    });
+  };
 });

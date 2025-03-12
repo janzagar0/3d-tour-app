@@ -210,8 +210,6 @@ tr {
   text-align: center;
   font-weight: bold;
   font-size: 28px;
-  color: #ffd200;
-  -webkit-text-stroke: 1.5px black;
   left: 50%;
   transform: translate(-50%, 0%);
   line-height: 2;
@@ -1203,6 +1201,12 @@ hr {
     bottom: 45%;
   }
 
+  #ht1,
+  #ht2,
+  #links {
+    display: none;
+  }
+
   #headerText {
     display: none;
   }
@@ -1254,9 +1258,14 @@ hr {
 
   #selectModal {
     width: 95%;
-    left: 2.5%;
+    right: 0;
     height: fit-content;
-    top: 130px;
+    top: 120px;
+  }
+
+  #dontshow-container {
+    transform: translate(0, 0);
+    right: 25%;
   }
 
   #mobile-disclaimer {

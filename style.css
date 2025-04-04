@@ -668,6 +668,7 @@ h6 {
   position: fixed;
   z-index: 910;
   width: 45%;
+  max-width: 625px;
   height: 57%;
   top: 21.5%;
   left: 50%;
@@ -682,7 +683,7 @@ h6 {
 #moreInfo-header {
   position: absolute;
   height: 50px;
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
   top: 0;
   right: 0;
   width: 100%;
@@ -784,7 +785,7 @@ h6 {
   width: 100%;
   text-align: center;
   z-index: 911;
-  border-top: 2px solid black;
+  border-top: 1px solid black;
 }
 
 #queryIcon {

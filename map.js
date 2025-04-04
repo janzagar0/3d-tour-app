@@ -45,6 +45,15 @@ require([
     },
   };
 
+  Promise.all([webscene.when(), view.when()])
+    .then(() => {
+      showPage();
+      console.log("Web scene and view loaded.");
+    })
+    .catch((errorMsg) => {
+      console.error("Error loading web scene or view: ", errorMsg);
+    });
+
   // Create and populate legend based on cabinet categories
   let legendLayer;
   webscene.loadAll().then(() => {

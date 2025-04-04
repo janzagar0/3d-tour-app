@@ -34,10 +34,12 @@ const splash = document.querySelector("#splash");
 const splashButton = document.querySelector("#splash-button");
 
 // Create timer for loader (5 seconds) to allow 3D model some time to load
+/*
 let loaderTimer;
 function spinner() {
   loaderTimer = setTimeout(showPage, 5000);
 }
+*/
 
 function showPage() {
   hideElement(document.querySelector("#loader"));

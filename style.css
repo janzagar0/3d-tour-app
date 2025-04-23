@@ -203,6 +203,7 @@ tr {
   /*color: #ffd200;*/
 }
 
+/*
 #headerText-mobile {
   position: absolute;
   margin-left: auto;
@@ -216,6 +217,18 @@ tr {
   width: 100%;
   height: 60px;
   display: none;
+}
+*/
+
+#headerText-mobile {
+  float: right;
+  width: 200px;
+  height: 100%;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+  padding-right: 10px;
 }
 
 #headerImage {
@@ -799,10 +812,9 @@ h6 {
   right: 20px;
   top: 20px;
   z-index: 899;
-  /*border: 3px solid black;*/
-  /*border: 1px solid transparent;*/
-  outline-color: transparent;
-  box-shadow: 1px 1px 1px 1px #333;
+  /*border: 0.5px solid darkgray;*/
+  outline-color: #6a6a6b;
+  box-shadow: 0 1px 1px 1px gray;
 }
 
 #search {
@@ -815,7 +827,7 @@ h6 {
 }
 
 #search:hover {
-  background: lightgray;
+  background: #eaeaea;
 }
 /*
 #queryIcon. tooltip {
@@ -846,19 +858,19 @@ h6 {
   /*top: 180px;*/
   top: 92px;
   z-index: 899;
-  /*border: 3px solid black;*/
-  outline-color: transparent;
-  box-shadow: 1px 1px 1px 1px #333;
-}
-
-#legendIcon:hover {
-  background-color: lightgray;
+  /*border: 0.5px solid darkgray;*/
+  outline-color: #6a6a6b;
+  box-shadow: 0 1px 1px 1px gray;
 }
 
 #legend {
   padding: 2px;
   height: 28px;
   width: 28px;
+}
+
+#legend:hover {
+  background-color: #eaeaea;
 }
 
 .tooltip {

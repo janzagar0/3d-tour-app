@@ -44,6 +44,8 @@ function spinner() {
 function showPage() {
   hideElement(document.querySelector("#loader"));
   hideElement(document.querySelector("#loader-page"));
+  showElement(splash);
+  showElement(shadow);
 }
 
 /**************************************************************************
@@ -51,6 +53,7 @@ function showPage() {
     wants to hide the splash screen next time they visit (valid for 7
     days).
 **************************************************************************/
+/*
 if (document.cookie) {
   hideElement(splash);
   hideElement(shadow);
@@ -62,6 +65,7 @@ function setCookie() {
   if (isChecked)
     document.cookie = `hideSplash = yes; path=/; max-age=${60 * 60 * 24 * 7}`;
 }
+*/
 
 // Close splash screen on clicking button
 splashButton.onclick = function () {

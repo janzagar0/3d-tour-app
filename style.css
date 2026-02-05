@@ -41,7 +41,9 @@ tr {
   width: 100%;
   height: 100%;
   z-index: 999;
-  transition: width 4s, height 4s;
+  transition:
+    width 4s,
+    height 4s;
 }
 
 #loader-header {
@@ -174,6 +176,7 @@ tr {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  color: white;
   /*font-weight: bold;*/
   /*font-size: 28px;*/
   left: 50%;
@@ -310,6 +313,7 @@ tr {
 }
 
 #splash-cell-text {
+  color: white;
   position: absolute;
   right: 10px;
   cursor: pointer;
@@ -335,6 +339,7 @@ tr {
   font-weight: bold;*/
   cursor: pointer;
   text-decoration: underline;
+  color: white;
 }
 
 #linkText:hover {
@@ -1110,6 +1115,7 @@ hr {
   right: 0px;
   height: 40px;
   width: 80px;
+  color: white;
 }
 
 #selectLabel {

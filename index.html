@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -295,6 +295,14 @@
           ><text id="feedbackLink">Feedback Survey Form</text></a
         >
         <br />
+        <a
+          href="https://github.com/janzagar0/3d-tour-app"
+          class="moreInfo-link2"
+          target="_blank"
+        >
+          <text id="feedbackLink">View source code on Github</text>
+        </a>
+        <br />
       </div>
       <div id="moreInfo-footer">
         <button type="button" class="modal-button" id="closeMoreInfo">
@@ -320,11 +328,19 @@
           >
           <fieldset class="select-fieldset">
             <legend>Select a category:</legend>
-            <select id="category" data-index="-1"></select>
+            <select
+              id="category"
+              data-index="-1"
+              aria-labelledby="Select a category"
+            ></select>
           </fieldset>
           <fieldset class="select-fieldset">
             <legend>Select a subcategory:</legend>
-            <select id="subcategory" data-index="-1"></select>
+            <select
+              id="subcategory"
+              data-index="-1"
+              aria-labelledby="Select a subcategory"
+            ></select>
           </fieldset>
           <hr />
           <input
@@ -338,7 +354,7 @@
           >
           <fieldset class="select-fieldset">
             <legend>Select a cabinet:</legend>
-            <select id="cabinet"></select>
+            <select id="cabinet" aria-labelledby="Select a cabinet"></select>
           </fieldset>
           <hr />
           <input
@@ -353,14 +369,18 @@
           <fieldset class="select-fieldset">
             <legend>Specify a geographic location:</legend>
             <!--<select id="content"></select>-->
-            <input type="text" id="locationInput" />
+            <input
+              type="text"
+              id="locationInput"
+              aria-labelledby="Specify a geographic location"
+            />
           </fieldset>
           <hr />
           <button
             type="button"
             class="search-button"
             id="searchButton"
-            onclick="executeQuery();"
+            onclick="executeQuery()"
           >
             Search the collection
           </button>
@@ -368,7 +388,7 @@
             type="button"
             class="search-button"
             id="clear"
-            onclick="deselect();"
+            onclick="deselect()"
           >
             Clear selection
           </button>
